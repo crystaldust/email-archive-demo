@@ -1,0 +1,24 @@
+[
+  {
+    "project_name": "ncurses_bug",
+    "archive_type": "txt",
+    "url_prefix": "https://lists.gnu.org/archive/mbox/bug-ncurses",
+    "start_since": "2000-09",
+    "date_format": "%Y-%m",
+    "interval": "month"
+  },
+  {
+    "project_name": "pam",
+    "archive_type": "gzip",
+    "url_prefix": "https://listman.redhat.com/archives/pam-list",
+    "start_since": "1996-May",
+    "date_format": "%Y-%B",
+    "interval": "month",
+    "file_ext": "txt.gz"
+  },
+  {
+    "project_name": "gcc_accnounce",
+    "archive_type": "pipermail",
+    "url_prefix": "https://gcc.gnu.org/pipermail/gcc-announce"
+  }
+]
