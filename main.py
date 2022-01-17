@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import requests
 import shutil
 import gzip
+import json
 from os import makedirs, remove
 
 from dateutil.relativedelta import relativedelta
@@ -90,8 +91,6 @@ class GZipArchive(FileArchive):
             remove(gzip_filepath)
 
 
-import json
-
 archives = []
 with open('./maillists.json', 'r') as f:
     maillists = json.loads(f.read())
@@ -110,14 +109,11 @@ with open('./maillists.json', 'r') as f:
             kwargs['start_since'] = start_since
             if 'file_ext' in maillist and maillist['file_ext']:
                 kwargs['file_ext'] = maillist['file_ext']
-            archive = FileArchive(**kwargs) # TODO OK, perceval can parse gzip file into mbox!
+            archive = FileArchive(**kwargs)  # TODO OK, perceval can parse gzip file into mbox!
             archives.append(archive)
         elif archive_type == 'pipermail':
             archive = EmailArchive(**kwargs)
             archives.append(archive)
-            # gcc_announce_archive = EmailArchive('gcc_accnounce', 'https://gcc.gnu.org/pipermail/gcc-announce')
-            # # since = datetime.strptime('2020-12', '%Y-%m')
-            # gcc_announce_archive.get_res()
 
 for archive in archives:
     test_since = datetime.strptime('2021-01', '%Y-%m')
@@ -135,65 +131,3 @@ for archive in archives:
     for message in repo.fetch(from_date=test_since):
         # Warning! Some content cannot be encoded as UTF-8
         print(message['data']['Subject'].encode('unicode_escape'))
-    # print(len(items))
-
-
-# start_since = datetime.strptime('2000-09', date_format)
-# ncurses_bug_archiver = FileArchive('ncurses_bug', 'https://lists.gnu.org/archive/mbox/bug-ncurses',
-#                                    url_format=date_format, start_since=start_since)
-
-# date_format = '%Y-%m'
-# start_since = datetime.strptime('2000-09', date_format)
-# ncurses_bug_archiver = FileArchive('ncurses_bug', 'https://lists.gnu.org/archive/mbox/bug-ncurses',
-#                                    url_format=date_format, start_since=start_since)
-# pam_start_since = datetime.strptime('1996-May', '%Y-%B')
-# pam_archive = GZipArchive('pam', 'https://listman.redhat.com/archives/pam-list', url_format='%Y-%B',
-#                           file_ext='txt.gz', start_since=pam_start_since)
-#
-
-# def download_some_samples():
-#     ncurses_since = datetime.strptime('2000-09', date_format)
-#     ncurese_until = datetime.strptime('2000-11', date_format)
-#     ncurses_bug_archiver.get_res(ncurses_since, ncurese_until)
-#
-#     pam_since = datetime.strptime('2000-09', date_format)
-#     pam_until = datetime.strptime('2000-11', date_format)
-#     pam_archive.get_res(pam_since, pam_until)
-
-
-#
-# ncurses_bug_mbox = MBox(uri=ncurses_bug_archiver.url_prefix, dirpath=ncurses_bug_archiver.project_name)
-# errs = []
-# handled_subjects = []
-# for message in ncurses_bug_mbox.fetch():
-#     continue
-#     # print(message['data']['Subject'].encode('unicode_escape'))
-#     # x = (message['data']['Subject'])
-#     try:
-#         print(message['data']['Subject'])
-#     except Exception as e:
-#         # print(e)`
-#         # errs.append(e)
-#         handled_subjects.append(message['data']['Subject'].encode('unicode_escape'))
-
-
-# class PipermailArchive(EmailArchive):
-#     pass
-# def get_res(self, since=None, until=None):
-#     pass
-# since_str = since.strftime(self.url_format)
-# self.res_path = f'{self.http_prefix}?start={since_str}'
-
-
-# gcc_announce_archive = EmailArchive('gcc_accnounce', 'https://gcc.gnu.org/pipermail/gcc-announce')
-# # since = datetime.strptime('2020-12', '%Y-%m')
-# gcc_announce_archive.get_res()
-#
-# # 'https://gcc.gnu.org/pipermail/gcc-announce/' --from-date '2020-12-31T00:00:00'
-# start_date = datetime.now()
-# p = Pipermail(gcc_announce_archive.url_prefix, dirpath='./gcc-announce')
-# for msg in p.fetch(from_date=datetime.strptime('2020-12', '%Y-%m')):
-#     print(msg['data']['Subject'])
-#
-# duration = datetime.now() - start_date
-# print(duration)
